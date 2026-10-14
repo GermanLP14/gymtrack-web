@@ -26,7 +26,7 @@ export default function RoutinesScreen() {
       ) : (
         routines?.map((r) => (
           <Pressable key={r.id} onPress={() => router.push(`/routine/${r.id}`)} accessibilityRole="button">
-            <Card style={{ borderLeftWidth: 5, borderLeftColor: colorOf(r.color) }}>
+            <Card style={{ borderWidth: 2, borderColor: colorOf(r.color) }}>
               <Row style={{ justifyContent: 'space-between' }}>
                 <View style={{ flex: 1 }}>
                   <ThemedText style={{ fontWeight: 700 }} numberOfLines={1}>

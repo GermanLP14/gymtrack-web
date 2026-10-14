@@ -66,7 +66,7 @@ export default function RoutineScreen() {
           action={<Button title="Editar rutina" small onPress={edit} />}
         />
       ) : (
-        <Card style={{ gap: 0, paddingVertical: Spacing.one, borderLeftWidth: 5, borderLeftColor: colorOf(routine.color) }}>
+        <Card style={{ gap: 0, paddingVertical: Spacing.one, borderWidth: 2, borderColor: colorOf(routine.color) }}>
           {routine.exercises.map((ex, i) => (
             <Pressable
               key={ex.id}

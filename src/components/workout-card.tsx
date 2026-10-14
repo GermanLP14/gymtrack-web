@@ -23,7 +23,7 @@ export function WorkoutCard({ workout: w }: { workout: Workout }) {
 
   return (
     <Pressable onPress={() => router.push(`/history/${w.id}`)} accessibilityRole="button">
-      <Card style={{ borderLeftWidth: 5, borderLeftColor: colorOf(w.color) }}>
+      <Card style={{ borderWidth: 2, borderColor: colorOf(w.color) }}>
         <Row style={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <View style={{ flex: 1 }}>
             <ThemedText style={{ fontWeight: 700 }} numberOfLines={1}>
