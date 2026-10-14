@@ -43,7 +43,7 @@
     "start": "expo start --web",
     "build": "expo export --platform web",
     "predeploy": "expo export --platform web --clear && node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\"",
-    "deploy": "gh-pages --nojekyll -d dist",
+    "deploy": "gh-pages --nojekyll --dotfiles -d dist",
     "lint": "expo lint"
   },
   "private": true
