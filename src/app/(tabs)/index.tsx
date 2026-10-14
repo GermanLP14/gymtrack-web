@@ -1,13 +1,14 @@
 import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useRef, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 
 import { CoachCard } from '@/components/coach-card';
 import { Alert } from '@/components/dialog';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, EmptyState, Row, Screen, SectionTitle, StatTile } from '@/components/ui';
 import { useFocusData } from '@/hooks/use-focus-data';
+import { SidebarBreakpoint } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { getEffectiveProfile } from '@/lib/body';
 import { basalSoFar } from '@/lib/calories';
@@ -28,6 +29,8 @@ export default function TodayScreen() {
   const db = useSQLiteContext();
   const theme = useTheme();
   const [starting, setStarting] = useState<number | 'free' | null>(null);
+  // On wide screens Ajustes lives in the sidebar.
+  const wide = useWindowDimensions().width >= SidebarBreakpoint;
 
   const askedOnboarding = useRef(false);
 
@@ -80,14 +83,16 @@ export default function TodayScreen() {
           <ThemedText type="subtitle">Hoy</ThemedText>
           <ThemedText themeColor="textSecondary">{capitalize(longDate(new Date()))}</ThemedText>
         </View>
-        <Pressable
-          onPress={() => router.push('/settings')}
-          accessibilityRole="button"
-          accessibilityLabel="Ajustes"
-          hitSlop={10}
-          style={[styles.gear, { backgroundColor: theme.backgroundElement }]}>
-          <ThemedText style={{ fontSize: 20 }}>⚙️</ThemedText>
-        </Pressable>
+        {wide ? null : (
+          <Pressable
+            onPress={() => router.push('/settings')}
+            accessibilityRole="button"
+            accessibilityLabel="Ajustes"
+            hitSlop={10}
+            style={[styles.gear, { backgroundColor: theme.backgroundElement, borderColor: theme.border }]}>
+            <ThemedText style={{ fontSize: 20 }}>⚙️</ThemedText>
+          </Pressable>
+        )}
       </Row>
 
       <Card>
@@ -178,5 +183,5 @@ export default function TodayScreen() {
 
 const styles = StyleSheet.create({
   hero: { fontSize: 44, lineHeight: 50, fontWeight: 700 },
-  gear: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
+  gear: { width: 44, height: 44, borderRadius: 22, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
 });

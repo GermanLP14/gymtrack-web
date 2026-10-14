@@ -50,7 +50,7 @@ export function DialogHost() {
       <Pressable style={styles.backdrop} onPress={dismiss} accessibilityLabel="Cerrar">
         {current ? (
           <Pressable
-            style={[styles.dialog, { backgroundColor: theme.background, borderColor: theme.border }]}
+            style={[styles.dialog, { backgroundColor: theme.backgroundElement, borderColor: theme.border, boxShadow: theme.shadow }]}
             accessibilityRole="alert">
             <ThemedText style={{ fontWeight: 700, fontSize: 18 }}>{current.title}</ThemedText>
             {current.message ? <ThemedText themeColor="textSecondary">{current.message}</ThemedText> : null}
@@ -75,7 +75,8 @@ export function DialogHost() {
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(5, 6, 10, 0.55)',
+    backdropFilter: 'blur(4px)',
     alignItems: 'center',
     justifyContent: 'center',
     padding: Spacing.three,
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
   dialog: {
     width: '100%',
     maxWidth: 420,
-    borderRadius: 16,
+    borderRadius: 20,
     borderWidth: 1,
     padding: Spacing.four,
     gap: Spacing.two,

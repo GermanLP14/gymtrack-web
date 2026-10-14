@@ -1,13 +1,12 @@
-import { Picker } from '@react-native-picker/picker';
 import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 
 import { BarsChart, TrendChart } from '@/components/charts';
 import { CoachCard } from '@/components/coach-card';
 import { ThemedText } from '@/components/themed-text';
-import { Button, Card, EmptyState, Row, Screen, SectionTitle, Segmented, StatTile } from '@/components/ui';
+import { Button, Card, EmptyState, Row, Screen, SectionTitle, Segmented, Select, StatTile } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useContentWidth } from '@/hooks/use-content-width';
 import { useFocusData } from '@/hooks/use-focus-data';
@@ -105,20 +104,19 @@ export default function StatsScreen() {
       <ThemedText type="subtitle">Estadísticas</ThemedText>
 
       <SectionTitle>Progreso por ejercicio</SectionTitle>
-      <Card style={{ paddingVertical: Platform.OS === 'ios' ? 0 : Spacing.two }}>
-        <Picker
-          selectedValue={selectedId ?? undefined}
-          onValueChange={(v) => setExerciseId(String(v))}
-          mode="dropdown"
-          dropdownIconColor={theme.text}
-          style={{ color: theme.text }}
-          itemStyle={{ color: theme.text, fontSize: 17, height: 130 }}
-          accessibilityLabel="Ejercicio">
-          {overview?.tracked.map((t) => (
-            <Picker.Item key={t.id} label={`${capitalize(t.name)} (${t.sessions})`} value={t.id} />
-          ))}
-        </Picker>
-      </Card>
+      <Select
+        value={selectedId}
+        onChange={setExerciseId}
+        options={tracked.map((t) => ({
+          value: t.id,
+          label: capitalize(t.name),
+          hint: `${t.sessions} ${t.sessions === 1 ? 'sesión' : 'sesiones'}`,
+        }))}
+        title="Elegir ejercicio"
+        searchPlaceholder="Buscar ejercicio…"
+        placeholder="Elegí un ejercicio"
+        accessibilityLabel="Ejercicio"
+      />
 
       <Segmented options={METRICS} value={metric} onChange={setMetric} />
       <Segmented options={RANGES} value={range} onChange={setRange} />

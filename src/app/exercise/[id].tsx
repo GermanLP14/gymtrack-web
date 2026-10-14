@@ -79,7 +79,7 @@ export default function ExerciseDetail() {
       <Card>
         {exercise.instructions.map((step, i) => (
           <Row key={i} style={{ alignItems: 'flex-start' }}>
-            <ThemedText style={{ fontWeight: 700, color: theme.accent, width: 22 }}>{i + 1}.</ThemedText>
+            <ThemedText style={{ fontWeight: 700, color: theme.tint, width: 22 }}>{i + 1}.</ThemedText>
             <ThemedText style={{ flex: 1 }}>{step}</ThemedText>
           </Row>
         ))}

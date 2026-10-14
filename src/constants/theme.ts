@@ -9,30 +9,37 @@ import { Platform } from 'react-native';
 
 export const Colors = {
   light: {
-    text: '#000000',
-    background: '#ffffff',
-    backgroundElement: '#F0F0F3',
-    backgroundSelected: '#E0E1E6',
-    textSecondary: '#60646C',
-    border: '#E0E1E6',
-    accent: '#2F6FEB',
+    text: '#0F1222',
+    background: '#F4F5F9',
+    backgroundElement: '#FFFFFF',
+    backgroundSelected: '#EBEDF3',
+    textSecondary: '#5E6478',
+    border: '#E3E6EE',
+    accent: '#4F46E5',
     accentText: '#ffffff',
-    success: '#1F9D55',
+    accentSoft: 'rgba(79, 70, 229, 0.10)',
+    /** Accent for text and icons on plain or soft-accent backgrounds. */
+    tint: '#4F46E5',
+    success: '#16A34A',
     warning: '#C77700',
-    danger: '#D93036',
+    danger: '#DC2626',
+    shadow: '0 1px 2px rgba(15, 18, 34, 0.04), 0 4px 16px rgba(15, 18, 34, 0.05)',
   },
   dark: {
-    text: '#ffffff',
-    background: '#000000',
-    backgroundElement: '#212225',
-    backgroundSelected: '#2E3135',
-    textSecondary: '#B0B4BA',
-    border: '#2E3135',
-    accent: '#4C8DFF',
+    text: '#F2F3F7',
+    background: '#0B0C10',
+    backgroundElement: '#15171E',
+    backgroundSelected: '#22252F',
+    textSecondary: '#9CA1B2',
+    border: '#262935',
+    accent: '#6366F1',
     accentText: '#ffffff',
+    accentSoft: 'rgba(129, 140, 248, 0.16)',
+    tint: '#A5B4FC',
     success: '#3DD68C',
     warning: '#F5A524',
     danger: '#FF6166',
+    shadow: '0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.25)',
   },
 } as const;
 
@@ -84,4 +91,8 @@ export const Spacing = {
   six: 64,
 } as const;
 
-export const MaxContentWidth = 800;
+export const MaxContentWidth = 960;
+
+/** Window width from which the tabs become a sidebar instead of a bottom bar. */
+export const SidebarBreakpoint = 900;
+export const SidebarWidth = 240;

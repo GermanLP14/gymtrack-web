@@ -20,7 +20,7 @@ export function useActionColor(action: CoachAction): string {
   return {
     start: theme.textSecondary,
     increase: theme.success,
-    hold: theme.accent,
+    hold: theme.tint,
     decrease: theme.warning,
     deload: theme.warning,
   }[action];
@@ -32,7 +32,7 @@ export function CoachCard({ rec, name, compact }: { rec: Recommendation; name?: 
   const color = useActionColor(rec.action);
   const plan = rec.weight != null ? `${rec.sets} × ${rec.reps} · ${formatKg(rec.weight)}` : `${rec.sets} × ${rec.reps}`;
   return (
-    <View style={[styles.card, { backgroundColor: theme.backgroundElement, borderLeftColor: color }]}>
+    <View style={[styles.card, { backgroundColor: theme.backgroundElement, borderColor: theme.border, borderLeftColor: color }]}>
       {name ? (
         <ThemedText type="small" themeColor="textSecondary" numberOfLines={1}>
           {capitalize(name)}
@@ -56,7 +56,7 @@ export function CoachCard({ rec, name, compact }: { rec: Recommendation; name?: 
 }
 
 const styles = StyleSheet.create({
-  card: { borderRadius: 12, borderLeftWidth: 4, padding: 12, gap: Spacing.one },
+  card: { borderRadius: 14, borderWidth: 1, borderLeftWidth: 4, padding: 14, gap: Spacing.one },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: Spacing.two, flexWrap: 'wrap' },
   title: { fontSize: 16, fontWeight: 700 },
 });
