@@ -1,11 +1,12 @@
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useMemo, useState } from 'react';
-import { View } from 'react-native';
-import { Calendar, LocaleConfig } from 'react-native-calendars';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Calendar, LocaleConfig, type DateData } from 'react-native-calendars';
 
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, EmptyState, Row, Screen, SectionTitle, Segmented, StatTile } from '@/components/ui';
 import { WorkoutCard } from '@/components/workout-card';
+import { Fonts, Spacing } from '@/constants/theme';
 import { useFocusData } from '@/hooks/use-focus-data';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useRoutineColors, useTheme } from '@/hooks/use-theme';
@@ -111,25 +112,49 @@ function HistoryCalendar() {
   );
   const { data: workouts } = useFocusData(useCallback(() => getWorkoutsForDay(db, selected), [db, selected]));
 
-  // Each trained day gets a ring in the color of its (first) routine.
-  const marked = useMemo(() => {
-    const m: Record<string, object> = {};
-    for (const d of data?.days ?? []) {
-      m[d.date] = {
-        customStyles: {
-          container: { borderWidth: 2.5, borderColor: colorOf(d.colors[0]), borderRadius: 18 },
-          text: { color: theme.text, fontWeight: '700' },
-        },
-      };
+  // Each trained day gets a ring in the color of its (first) routine. Days are drawn by
+  // our own component so the number sits exactly in the middle of the ring.
+  const dayComponent = useMemo(() => {
+    const rings = new Map((data?.days ?? []).map((d) => [d.date, colorOf(d.colors[0])]));
+    const today = toDayKey(new Date());
+    function CalendarDay({ date, state }: { date?: DateData; state?: string }) {
+      if (!date) return <View style={styles.day} />;
+      const key = date.dateString;
+      const ring = rings.get(key);
+      const isSelected = key === selected;
+      const outside = state === 'disabled' || state === 'inactive';
+      return (
+        <Pressable
+          onPress={() => setSelected(key)}
+          accessibilityRole="button"
+          accessibilityLabel={key}
+          accessibilityState={{ selected: isSelected }}
+          style={(s) => [
+            styles.day,
+            {
+              borderColor: ring ?? 'transparent',
+              backgroundColor: isSelected
+                ? theme.accentSoft
+                : (s as { hovered?: boolean }).hovered
+                  ? theme.backgroundSelected
+                  : 'transparent',
+              opacity: outside ? 0.3 : 1,
+            },
+          ]}>
+          <ThemedText
+            style={[
+              styles.dayText,
+              {
+                color: isSelected || key === today ? theme.tint : theme.text,
+                fontWeight: ring || isSelected || key === today ? 700 : 500,
+              },
+            ]}>
+            {date.day}
+          </ThemedText>
+        </Pressable>
+      );
     }
-    const sel = (m[selected] as { customStyles?: { container?: object; text?: object } } | undefined)?.customStyles;
-    m[selected] = {
-      customStyles: {
-        container: { ...(sel?.container ?? { borderRadius: 18 }), backgroundColor: theme.backgroundSelected },
-        text: sel?.text ?? { color: theme.text },
-      },
-    };
-    return m;
+    return CalendarDay;
   }, [data, selected, theme, colorOf]);
 
   const days = data?.days ?? [];
@@ -138,14 +163,12 @@ function HistoryCalendar() {
 
   return (
     <>
-      <Card style={{ padding: 4 }}>
+      <Card style={{ padding: Spacing.two }}>
         <Calendar
           key={scheme}
           firstDay={1}
           current={selected}
-          markingType="custom"
-          markedDates={marked}
-          onDayPress={(d: { dateString: string }) => setSelected(d.dateString)}
+          dayComponent={dayComponent}
           onMonthChange={(d: { dateString: string }) => setMonth(d.dateString.slice(0, 7))}
           enableSwipeMonths
           theme={{
@@ -153,11 +176,15 @@ function HistoryCalendar() {
             dayTextColor: theme.text,
             monthTextColor: theme.text,
             textSectionTitleColor: theme.textSecondary,
-            textDisabledColor: theme.backgroundSelected,
-            todayTextColor: theme.accent,
-            arrowColor: theme.accent,
+            textDisabledColor: theme.textSecondary,
+            todayTextColor: theme.tint,
+            arrowColor: theme.tint,
             textDayFontWeight: '500',
             textMonthFontWeight: '700',
+            textMonthFontSize: 17,
+            textDayHeaderFontWeight: '600',
+            textMonthFontFamily: Fonts?.sans,
+            textDayHeaderFontFamily: Fonts?.sans,
           }}
         />
       </Card>
@@ -199,3 +226,15 @@ function HistoryCalendar() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  day: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    borderWidth: 2.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dayText: { fontSize: 15, lineHeight: 18, textAlign: 'center', includeFontPadding: false },
+});
