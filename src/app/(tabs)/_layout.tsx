@@ -72,6 +72,7 @@ function Sidebar({ state, navigation }: BottomTabBarProps) {
             />
           );
         })}
+        <NavItem icon="💬" label="Coach IA" onPress={() => router.push('/coach')} />
       </View>
 
       <View style={{ flex: 1 }} />

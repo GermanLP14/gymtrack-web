@@ -8,7 +8,7 @@ import { Alert } from '@/components/dialog';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, EmptyState, Row, Screen, SectionTitle, StatTile } from '@/components/ui';
 import { useFocusData } from '@/hooks/use-focus-data';
-import { SidebarBreakpoint } from '@/constants/theme';
+import { SidebarBreakpoint, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { getEffectiveProfile } from '@/lib/body';
 import { basalSoFar } from '@/lib/calories';
@@ -84,16 +84,41 @@ export default function TodayScreen() {
           <ThemedText themeColor="textSecondary">{capitalize(longDate(new Date()))}</ThemedText>
         </View>
         {wide ? null : (
-          <Pressable
-            onPress={() => router.push('/settings')}
-            accessibilityRole="button"
-            accessibilityLabel="Ajustes"
-            hitSlop={10}
-            style={[styles.gear, { backgroundColor: theme.backgroundElement, borderColor: theme.border }]}>
-            <ThemedText style={{ fontSize: 20 }}>⚙️</ThemedText>
-          </Pressable>
+          <Row>
+            <Pressable
+              onPress={() => router.push('/coach')}
+              accessibilityRole="button"
+              accessibilityLabel="Coach IA"
+              hitSlop={10}
+              style={[styles.gear, { backgroundColor: theme.backgroundElement, borderColor: theme.border }]}>
+              <ThemedText style={{ fontSize: 20 }}>💬</ThemedText>
+            </Pressable>
+            <Pressable
+              onPress={() => router.push('/settings')}
+              accessibilityRole="button"
+              accessibilityLabel="Ajustes"
+              hitSlop={10}
+              style={[styles.gear, { backgroundColor: theme.backgroundElement, borderColor: theme.border }]}>
+              <ThemedText style={{ fontSize: 20 }}>⚙️</ThemedText>
+            </Pressable>
+          </Row>
         )}
       </Row>
+
+      <Pressable onPress={() => router.push('/coach')} accessibilityRole="button">
+        <Card style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.three }}>
+          <ThemedText style={{ fontSize: 28 }}>💬</ThemedText>
+          <View style={{ flex: 1 }}>
+            <ThemedText style={{ fontWeight: 700 }}>Hablá con tu coach IA</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              Consultale sobre tus rutinas, pesos y progreso. Puede ajustar tus rutinas con tu confirmación.
+            </ThemedText>
+          </View>
+          <ThemedText themeColor="textSecondary" style={{ fontSize: 20 }}>
+            ›
+          </ThemedText>
+        </Card>
+      </Pressable>
 
       <Card>
         <ThemedText type="smallBold" themeColor="textSecondary" style={{ textTransform: 'uppercase', letterSpacing: 0.6 }}>

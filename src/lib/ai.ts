@@ -96,15 +96,20 @@ export async function generateWorkoutSummary(model: AiModel, input: Parameters<t
     if (!text) throw new AiError('La IA devolvió una respuesta vacía. Probá de nuevo.');
     return text;
   } catch (e) {
-    if (e instanceof AiError) throw e;
-    if (e instanceof Anthropic.AuthenticationError) throw new AiError('La API key no es válida. Revisala en Ajustes.');
-    if (e instanceof Anthropic.PermissionDeniedError) throw new AiError('Tu API key no tiene permiso para usar este modelo.');
-    if (e instanceof Anthropic.RateLimitError) throw new AiError('Demasiadas consultas seguidas. Probá en un minuto.');
-    if (e instanceof Anthropic.APIConnectionError) throw new AiError('Sin conexión. El resumen se puede generar más tarde.');
-    if (e instanceof Anthropic.APIError) {
-      if (e.status === 402) throw new AiError('Tu cuenta de Anthropic no tiene crédito disponible.');
-      throw new AiError(`Error de la API de Claude (${e.status ?? 'desconocido'}).`);
-    }
-    throw e;
+    throw toAiError(e, 'Sin conexión. El resumen se puede generar más tarde.');
   }
+}
+
+/** Turns SDK errors into messages for the user; anything else is returned unchanged. */
+export function toAiError(e: unknown, offlineMessage = 'Sin conexión. Revisá tu internet y probá de nuevo.'): unknown {
+  if (e instanceof AiError) return e;
+  if (e instanceof Anthropic.AuthenticationError) return new AiError('La API key no es válida. Revisala en Ajustes.');
+  if (e instanceof Anthropic.PermissionDeniedError) return new AiError('Tu API key no tiene permiso para usar este modelo.');
+  if (e instanceof Anthropic.RateLimitError) return new AiError('Demasiadas consultas seguidas. Probá en un minuto.');
+  if (e instanceof Anthropic.APIConnectionError) return new AiError(offlineMessage);
+  if (e instanceof Anthropic.APIError) {
+    if (e.status === 402) return new AiError('Tu cuenta de Anthropic no tiene crédito disponible.');
+    return new AiError(`Error de la API de Claude (${e.status ?? 'desconocido'}).`);
+  }
+  return e;
 }

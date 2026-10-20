@@ -44,6 +44,7 @@ function App() {
         <Stack.Screen name="exercise/[id]" options={{ title: 'Ejercicio' }} />
         <Stack.Screen name="exercise-picker" options={{ title: 'Agregar ejercicio', presentation: 'modal' }} />
         <Stack.Screen name="settings" options={{ title: 'Ajustes' }} />
+        <Stack.Screen name="coach" options={{ title: 'Coach IA' }} />
         <Stack.Screen name="onboarding" options={{ title: 'Bienvenido', presentation: 'modal' }} />
       </Stack>
       <DialogHost />
